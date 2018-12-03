@@ -19,7 +19,7 @@ public class Field implements Cloneable
 		this.x = x;
 		this.y = y;
 
-		for(int i = 0; i < sudokuGrid.size(); i++)
+		for(int i = 1; i < sudokuGrid.size() + 1; i++)
 		{
 			this.possibleDigits.add(i);
 		}
