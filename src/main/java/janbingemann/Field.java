@@ -2,7 +2,7 @@ package janbingemann;
 
 import java.util.*;
 
-public class Field implements Cloneable
+public class Field implements Cloneable, Comparable<Field>
 {
 	private List<Integer> possibleDigits = new ArrayList<>();
 
@@ -124,5 +124,11 @@ public class Field implements Cloneable
 		{
 			return " ";
 		}
+	}
+
+	@Override
+	public int compareTo(Field o)
+	{
+		return this.possibleDigits.size() - o.possibleDigits.size();
 	}
 }

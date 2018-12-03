@@ -1,5 +1,6 @@
 package janbingemann;
 
+import java.util.Collections;
 import java.util.List;
 
 public class SudokuSolver
@@ -7,6 +8,7 @@ public class SudokuSolver
 	public static SudokuGrid solve(SudokuGrid sudokuGrid) throws CloneNotSupportedException
 	{
 		List<Field> freeFields = sudokuGrid.getFreeFields();
+		Collections.sort(freeFields);
 
 		for(Field field : freeFields)
 		{
