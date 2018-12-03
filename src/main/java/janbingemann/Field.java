@@ -92,6 +92,19 @@ public class Field implements Cloneable
 	}
 
 	@Override
+	public boolean equals(Object obj)
+	{
+		if(!(obj instanceof Field))
+		{
+			return false;
+		}
+
+		Field objField = (Field)obj;
+
+		return x == objField.x && y == objField.y;
+	}
+
+	@Override
 	protected Field clone() throws CloneNotSupportedException
 	{
 		Field field = (Field) super.clone();

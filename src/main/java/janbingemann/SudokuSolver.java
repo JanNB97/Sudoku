@@ -4,10 +4,8 @@ import java.util.List;
 
 public class SudokuSolver
 {
-	public static SudokuGrid solve(SudokuGrid inputSudoku) throws CloneNotSupportedException
+	public static SudokuGrid solve(SudokuGrid sudokuGrid) throws CloneNotSupportedException
 	{
-		SudokuGrid sudokuGrid = inputSudoku.clone();
-
 		List<Field> freeFields = sudokuGrid.getFreeFields();
 
 		for(Field field : freeFields)
