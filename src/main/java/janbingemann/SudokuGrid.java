@@ -231,15 +231,20 @@ public class SudokuGrid implements Cloneable
 		SudokuGrid sudokuGrid = (SudokuGrid)super.clone();
 
 		sudokuGrid.grid = new Field[this.size][this.size];
+		sudokuGrid.freeFields = new ArrayList<>();
 		for(int i = 0; i < this.size; i++)
 		{
 			for(int j = 0; j < this.size; j++)
 			{
-				sudokuGrid.grid[i][j] = this.grid[i][j].clone();
+				Field field = this.grid[i][j].clone();
+				sudokuGrid.grid[i][j] = field;
+				if(!field.isSet())
+				{
+					sudokuGrid.freeFields.add(field);
+				}
+
 			}
 		}
-
-		sudokuGrid.freeFields = new ArrayList<>(this.freeFields);
 
 		return sudokuGrid;
 	}
