@@ -1,10 +1,11 @@
 package janbingemann;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public class SudokuGrid
+public class SudokuGrid implements Cloneable
 {
 	private final int size;
 	private final int regionWidth;
@@ -90,13 +91,13 @@ public class SudokuGrid
 			throw new IllegalArgumentException();
 		}
 
-		Set<Integer> allPossibleDigits = field.getPossibleDigits();
+		List<Integer> allPossibleDigits = field.getPossibleDigits();
 		if(allPossibleDigits.size() != 1)
 		{
 			return null;
 		}
 
-		int digit = allPossibleDigits.iterator().next();
+		int digit = allPossibleDigits.get(0);
 
 		int x = field.getX();
 		int y = field.getY();
@@ -224,6 +225,25 @@ public class SudokuGrid
 	}
 
 	// --- --- --- Overwritten from object --- --- ---
+	@Override
+	protected SudokuGrid clone() throws CloneNotSupportedException
+	{
+		SudokuGrid sudokuGrid = (SudokuGrid)super.clone();
+
+		sudokuGrid.grid = new Field[this.size][this.size];
+		for(int i = 0; i < this.size; i++)
+		{
+			for(int j = 0; j < this.size; j++)
+			{
+				sudokuGrid.grid[i][j] = this.grid[i][j].clone();
+			}
+		}
+
+		sudokuGrid.freeFields = new ArrayList<>(this.freeFields);
+
+		return sudokuGrid;
+	}
+
 	@Override
 	public String toString()
 	{

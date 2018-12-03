@@ -1,11 +1,10 @@
 package janbingemann;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-public class Field
+public class Field implements Cloneable
 {
-	private Set<Integer> possibleDigits = new HashSet<>();
+	private List<Integer> possibleDigits = new ArrayList<>();
 
 	private final int x;
 	private final int y;
@@ -36,12 +35,12 @@ public class Field
 		return this.possibleDigits.contains(digit);
 	}
 
-	public boolean removePossibleDigit(int digit)
+	public boolean removePossibleDigit(Integer digit)
 	{
 		return this.possibleDigits.remove(digit);
 	}
 
-	public Set<Integer> getPossibleDigits()
+	public List<Integer> getPossibleDigits()
 	{
 		return this.possibleDigits;
 	}
@@ -90,6 +89,15 @@ public class Field
 	public boolean isSet()
 	{
 		return this.possibleDigits.size() == 1;
+	}
+
+	@Override
+	protected Field clone() throws CloneNotSupportedException
+	{
+		Field field = (Field) super.clone();
+		field.possibleDigits = new ArrayList<>(this.possibleDigits);
+
+		return field;
 	}
 
 	@Override
