@@ -2,6 +2,7 @@ package janbingemann;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class SudokuSolver
 {
@@ -47,7 +48,7 @@ public class SudokuSolver
 			return null;
 		}
 
-		newSudoku.setField(field.getX(), field.getY(), digit);
+		boolean success = newSudoku.setField(field.getX(), field.getY(), digit);
 
 		if(newSudoku.isUnsolvable())
 		{
@@ -57,6 +58,12 @@ public class SudokuSolver
 		if(newSudoku.isSolved())
 		{
 			return newSudoku;
+		}
+
+		if(!success)
+		{
+			Logger.getGlobal().severe("Internal error");
+			return null;
 		}
 
 		return solve(newSudoku);
