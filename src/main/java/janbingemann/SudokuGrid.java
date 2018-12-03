@@ -46,16 +46,44 @@ public class SudokuGrid
 		{
 			field.setDigit(digit);
 			this.freeFields.remove(field);
-			while (this.refreshFields(field) == Situation.SOLVABLE_AND_FIELD_IS_SET);
+
+			List<Field> setFields = new ArrayList<>();
+			setFields.add(field);
+
+			do
+			{
+				setFields = this.refreshAllFields(setFields);
+				if(setFields == null)
+				{
+					return true;
+				}
+			}
+			while (!setFields.isEmpty());
 			return true;
 		}
 
 		return false;
 	}
 
-	public Situation refreshFields(Field field)
+	public List<Field> refreshAllFields(List<Field> fields)
 	{
-		Situation situation = Situation.SOLVABLE_NO_CHANGE;
+		List<Field> setFields = new ArrayList<>();
+		for(Field field : fields)
+		{
+			List<Field> newSetFields = this.refreshFields(field);
+			if(newSetFields == null)
+			{
+				return null;
+			}
+			setFields.addAll(newSetFields);
+		}
+
+		return setFields;
+	}
+
+	public List<Field> refreshFields(Field field)
+	{
+		List<Field> setFields = new ArrayList<>();
 
 		if(this.isUnsolvable)
 		{
@@ -73,39 +101,42 @@ public class SudokuGrid
 		int x = field.getX();
 		int y = field.getY();
 
-		switch (this.refreshHorizontalVertical(x, y, digit, true))
+		List<Field> horizontalSetFields = this.refreshHorizontalVertical(x, y, digit, true);
+		if(horizontalSetFields == null)
 		{
-			case UNSOLVABLE:
-				return Situation.UNSOLVABLE;
-			case SOLVABLE_AND_FIELD_IS_SET:
-				situation = Situation.SOLVABLE_AND_FIELD_IS_SET;
-				break;
+			return null;
+		}
+		if(!horizontalSetFields.isEmpty())
+		{
+			setFields.addAll(horizontalSetFields);
 		}
 
-		switch (this.refreshHorizontalVertical(x, y, digit, false))
+		List<Field> verticalSetFields = this.refreshHorizontalVertical(x, y, digit, false);
+		if(verticalSetFields == null)
 		{
-			case UNSOLVABLE:
-				return Situation.UNSOLVABLE;
-			case SOLVABLE_AND_FIELD_IS_SET:
-				situation = Situation.SOLVABLE_AND_FIELD_IS_SET;
-				break;
+			return null;
+		}
+		if(!verticalSetFields.isEmpty())
+		{
+			setFields.addAll(verticalSetFields);
 		}
 
-		switch (this.refreshRegion(field, digit))
+		List<Field> regionSetFields = this.refreshRegion(field, digit);
+		if(regionSetFields == null)
 		{
-			case UNSOLVABLE:
-				return Situation.UNSOLVABLE;
-			case SOLVABLE_AND_FIELD_IS_SET:
-				situation = Situation.SOLVABLE_AND_FIELD_IS_SET;
-				break;
+			return null;
+		}
+		if(!regionSetFields.isEmpty())
+		{
+			setFields.addAll(regionSetFields);
 		}
 
-		return situation;
+		return setFields;
 	}
 
-	private Situation refreshHorizontalVertical(int x, int y, int digit, boolean horizontal)
+	private List<Field> refreshHorizontalVertical(int x, int y, int digit, boolean horizontal)
 	{
-		Situation situation = Situation.SOLVABLE_NO_CHANGE;
+		List<Field> setFields = new ArrayList<>();
 
 		for(int i = 0; i < size; i++)
 		{
@@ -124,22 +155,24 @@ public class SudokuGrid
 				field = this.grid[i][x];
 			}
 
-			switch (this.removePossibleDigit(field, digit))
+			Field setField = this.removePossibleDigit(field, digit);
+			if(this.isUnsolvable)
 			{
-				case UNSOLVABLE:
-					return Situation.UNSOLVABLE;
-				case SOLVABLE_AND_FIELD_IS_SET:
-					situation = Situation.SOLVABLE_AND_FIELD_IS_SET;
-					break;
+				return null;
+			}
+
+			if(setField != null)
+			{
+				setFields.add(setField);
 			}
 		}
 
-		return situation;
+		return setFields;
 	}
 
-	private Situation refreshRegion(Field field, int digit)
+	private List<Field> refreshRegion(Field field, int digit)
 	{
-		Situation situation = Situation.SOLVABLE_NO_CHANGE;
+		List<Field> setFields = new ArrayList<>();
 
 		int x = field.getX();
 		int y = field.getY();
@@ -154,38 +187,40 @@ public class SudokuGrid
 				}
 
 				Field f = this.grid[i][j];
-				switch (this.removePossibleDigit(f, digit))
+				Field setField = this.removePossibleDigit(f, digit);
+				if(this.isUnsolvable)
 				{
-					case UNSOLVABLE:
-						return Situation.UNSOLVABLE;
-					case SOLVABLE_AND_FIELD_IS_SET:
-						situation = Situation.SOLVABLE_AND_FIELD_IS_SET;
-						break;
+					return null;
+				}
+
+				if(setField != null)
+				{
+					setFields.add(setField);
 				}
 			}
 		}
 
-		return situation;
+		return setFields;
 	}
 
-	private Situation removePossibleDigit(Field field, int digit)
+	private Field removePossibleDigit(Field field, int digit)
 	{
 		if(field.removePossibleDigit(digit))
 		{
 			this.isUnsolvable = field.isUnsolvable();
 			if(this.isUnsolvable)
 			{
-				return Situation.UNSOLVABLE;
+				return null;
 			}
 
 			if(field.isSet())
 			{
 				this.freeFields.remove(field);
-				return Situation.SOLVABLE_AND_FIELD_IS_SET;
+				return field;
 			}
 		}
 
-		return Situation.SOLVABLE_NO_CHANGE;
+		return null;
 	}
 
 	// --- --- --- Overwritten from object --- --- ---
