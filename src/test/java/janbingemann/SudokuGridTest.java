@@ -135,9 +135,52 @@ public class SudokuGridTest
 		y = 8;
 		this.setFieldSuccessfully(sudokuGrid, 0, y, 6);
 		this.setFieldSuccessfully(sudokuGrid, 3, y, 3);
-		//this.setFieldSuccessfully(sudokuGrid, 7, y, 1);
+		this.setFieldSuccessfully(sudokuGrid, 7, y, 1);
 
 		System.out.println(sudokuGrid.toString());
+	}
+
+	@Test
+	public void testSudokuGrid3()
+	{
+		SudokuGrid sudokuGrid = new SudokuGrid(6, 3, 2);
+		int y = 0;
+		this.setFieldSuccessfully(sudokuGrid, 0, y, 2);
+		this.setFieldSuccessfully(sudokuGrid, 2, y, 4);
+		this.setFieldSuccessfully(sudokuGrid, 4, y, 3);
+
+		y = 1;
+		this.setFieldSuccessfully(sudokuGrid, 1, y, 6);
+		this.setFieldSuccessfully(sudokuGrid, 5, y, 1);
+
+		y = 2;
+		this.setFieldSuccessfully(sudokuGrid, 0, y, 6);
+		this.setFieldSuccessfully(sudokuGrid, 2, y, 1);
+		this.setFieldSuccessfully(sudokuGrid, 3, y, 3);
+
+		y = 3;
+		this.setFieldSuccessfully(sudokuGrid, 1, y, 4);
+		this.setFieldSuccessfully(sudokuGrid, 5, y, 6);
+
+		y = 4;
+		this.setFieldSuccessfully(sudokuGrid, 2, y, 2);
+		this.setFieldSuccessfully(sudokuGrid, 4, y, 6);
+		this.setFieldSuccessfully(sudokuGrid, 5, y, 3);
+
+		y = 5;
+		this.setFieldSuccessfully(sudokuGrid, 1, y, 3);
+		this.setFieldSuccessfully(sudokuGrid, 3, y, 5);
+
+		SudokuGrid solvedSudoku = null;
+		try {
+			solvedSudoku = SudokuSolver.solve(sudokuGrid);
+		}
+		catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+
+		System.out.println(sudokuGrid.toString() + "\n");
+		System.out.println(solvedSudoku);
 	}
 
 	private void setFieldSuccessfully(SudokuGrid sudokuGrid, int x, int y, int digit)
