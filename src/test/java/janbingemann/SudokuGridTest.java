@@ -164,12 +164,6 @@ public class SudokuGridTest
 
 		y = 4;
 		this.setFieldSuccessfully(sudokuGrid, 2, y, 2);
-		this.setFieldSuccessfully(sudokuGrid, 4, y, 6);
-		this.setFieldSuccessfully(sudokuGrid, 5, y, 3);
-
-		y = 5;
-		this.setFieldSuccessfully(sudokuGrid, 1, y, 3);
-		this.setFieldSuccessfully(sudokuGrid, 3, y, 5);
 
 		SudokuGrid solvedSudoku = null;
 		try {
